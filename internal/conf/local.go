@@ -40,7 +40,6 @@ func loadLocal(localPath ...string) error {
 	fmt.Printf("服务器配置: %+v\n", Config.System)
 	fmt.Printf("Mysql配置: %+v\n", Config.Mysql)
 	fmt.Printf("Reids配置: %+v\n", Config.Redis)
-	fmt.Printf("OSS配置: %+v\n", Config.AliyunOSS)
 
 	// 监听配置文件变化
 	viper.WatchConfig()
@@ -52,7 +51,6 @@ func loadLocal(localPath ...string) error {
 		fmt.Printf("更新后的服务器配置: %+v\n", Config.System)
 		fmt.Printf("更新后的Mysql配置: %+v\n", Config.Mysql)
 		fmt.Printf("更新后的Reids配置: %+v\n", Config.Redis)
-		fmt.Printf("更新后的OSS配置: %+v\n", Config.AliyunOSS)
 	})
 	return nil
 }

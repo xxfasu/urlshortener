@@ -6,4 +6,5 @@ var ProviderSet = wire.NewSet(
 	NewCorsM,
 	NewRecoveryM,
 	NewLogM,
+	NewAuthM,
 )

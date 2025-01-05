@@ -21,3 +21,7 @@ max_backups = 30
 max_age = 7
 max_size = 1024
 compress = true
+
+[jwt]
+secret = "mycompletedsecret"
+expire = "24h"

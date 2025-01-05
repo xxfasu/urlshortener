@@ -48,8 +48,4 @@ mock:
   	done
 
 	mockgen -source=internal/repository/db.go -destination=test/mocks/repository/mocks_transaction/mocks_transaction.go -package=mocks_transaction;
-	mockgen -source=internal/casbin/interface.go -destination=test/mocks/casbin/mocks_casbin.go -package=mocks_casbin;
-	mockgen -source=pkg/captcha/interface.go -destination=test/mocks/pkg/mocks_captcha/mocks_captcha.go -package=mocks_captcha
-	mockgen -source=pkg/cache/interface.go -destination=test/mocks/pkg/mocks_cache/mocks_cache.go -package=mocks_cache
-	mockgen -source=pkg/oss/interface.go -destination=test/mocks/pkg/mocks_oss/mocks_oss.go -package=mocks_oss
 	@echo "mock file generation is complete!"

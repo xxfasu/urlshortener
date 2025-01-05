@@ -5,14 +5,14 @@ import (
 	"net/http"
 )
 
-type Cors struct {
+type CorsM struct {
 }
 
-func NewCorsM() *Cors {
-	return &Cors{}
+func NewCorsM() *CorsM {
+	return &CorsM{}
 }
 
-func (m *Cors) Handler() gin.HandlerFunc {
+func (m *CorsM) Handler() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		method := c.Request.Method
 		c.Header("Access-Control-Allow-Origin", c.GetHeader("Origin"))

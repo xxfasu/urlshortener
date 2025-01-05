@@ -4,6 +4,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/wire"
 	"github.com/xxfasu/urlshortener/internal/conf"
+	"github.com/xxfasu/urlshortener/internal/handler/v1/urls_handler"
+	"github.com/xxfasu/urlshortener/internal/handler/v1/user_handler"
 	"github.com/xxfasu/urlshortener/internal/middleware"
 	"net/http"
 )
@@ -11,9 +13,12 @@ import (
 var ProviderSet = wire.NewSet(NewRouter)
 
 func NewRouter(
-	recoveryM *middleware.Recovery,
-	corsM *middleware.Cors,
+	recoveryM *middleware.RecoveryM,
+	corsM *middleware.CorsM,
 	logM *middleware.LogM,
+	authM *middleware.AuthM,
+	userHandler *user_handler.Handler,
+	urlsHandler *urls_handler.Handler,
 ) *gin.Engine {
 	router := gin.New()
 	if conf.Env.Environment == "local" {
@@ -32,6 +37,12 @@ func NewRouter(
 			c.JSON(http.StatusOK, "ok")
 		})
 
+	}
+
+	{
+		userRouter(router, userHandler)
+
+		urlsRouter(router, authM, urlsHandler)
 	}
 	return router
 }

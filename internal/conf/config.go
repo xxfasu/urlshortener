@@ -6,24 +6,13 @@ import (
 	"fmt"
 	"github.com/spf13/viper"
 	"log"
+	"time"
 )
 
 // system 配置结构体
 type system struct {
 	Port string `mapstructure:"port"`
 	Host string `mapstructure:"host"`
-}
-
-// CrmebConfig 表示 Crmeb 的配置
-type CrmebConfig struct {
-	Version                    string `toml:"version"`                        // 当前代码版本
-	Domain                     string `toml:"domain"`                         // 配合swagger使用，待部署域名
-	WechatApiURL               string `toml:"wechat_api_url"`                 // 请求微信接口的专用服务器
-	WechatJsAPIDebug           bool   `toml:"wechat_js_api_debug"`            // 微信js api系列是否开启调试模式
-	WechatJsAPIBeta            bool   `toml:"wechat_js_api_beta"`             // 微信js api是否是beta版本
-	AsyncConfig                bool   `toml:"async_config"`                   // 是否同步config表数据到redis
-	AsyncWeChatProgramTempList bool   `toml:"async_wechat_program_temp_list"` // 是否同步小程序公共模板库
-	ImagePath                  string `toml:"image_path"`                     // 服务器图片路径配置，斜杠结尾
 }
 
 // mysql 配置结构体
@@ -41,30 +30,6 @@ type redis struct {
 	ClusterAddrs []string `mapstructure:"cluster_addrs"`
 }
 
-// oss 配置结构体
-type oss struct {
-	Provider string `mapstructure:"provider"`
-}
-
-// aliyunOSS 配置结构体
-type aliyunOSS struct {
-	Endpoint  string `mapstructure:"endpoint"`
-	KeyID     string `mapstructure:"key_id"`
-	KeySecret string `mapstructure:"key_secret"`
-	Bucket    string `mapstructure:"bucket"`
-	Region    string `mapstructure:"region"`
-	RoleArn   string `mapstructure:"role_arn"`
-	Domain    string `mapstructure:"domain"`
-}
-
-// qiniuyunOSS 配置结构体
-type qiniuyunOSS struct {
-	AccessKey string `mapstructure:"access_key"`
-	SecretKey string `mapstructure:"secret_key"`
-	Bucket    string `mapstructure:"bucket"`
-	Zone      string `mapstructure:"zone"`
-}
-
 type zapLog struct {
 	LogLevel    string `mapstructure:"log_level"`
 	Encoding    string `mapstructure:"encoding"`
@@ -75,16 +40,18 @@ type zapLog struct {
 	Compress    bool   `mapstructure:"compress"`
 }
 
+type jwt struct {
+	Secret string        `mapstructure:"secret"`
+	Expire time.Duration `mapstructure:"expire"`
+}
+
 // Config 总配置结构体
 type config struct {
-	System      system      `mapstructure:"system"`
-	CrmebConfig CrmebConfig `mapstructure:"crmeb_config"`
-	Mysql       mysql       `mapstructure:"mysql"`
-	Redis       redis       `mapstructure:"redis"`
-	OSS         oss         `mapstructure:"oss"`
-	AliyunOSS   aliyunOSS   `mapstructure:"aliyun_oss"`
-	Log         zapLog      `mapstructure:"zap_log"`
-	QiniuyunOSS qiniuyunOSS `mapstructure:"qiniuyun_oss"`
+	System system `mapstructure:"system"`
+	Mysql  mysql  `mapstructure:"mysql"`
+	Redis  redis  `mapstructure:"redis"`
+	Log    zapLog `mapstructure:"zap_log"`
+	JWT    jwt    `mapstructure:"jwt"`
 }
 
 var Config *config

@@ -11,14 +11,14 @@ import (
 	"time"
 )
 
-type Recovery struct {
+type RecoveryM struct {
 }
 
-func NewRecoveryM() *Recovery {
-	return &Recovery{}
+func NewRecoveryM() *RecoveryM {
+	return &RecoveryM{}
 }
 
-func (m *Recovery) Handler() gin.HandlerFunc {
+func (m *RecoveryM) Handler() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		defer func() {
 			if rv := recover(); rv != nil { // 捕获任何发生的恐慌（panic）

@@ -8,17 +8,39 @@ package wire
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/xxfasu/urlshortener/internal/handler/v1/urls_handler"
+	"github.com/xxfasu/urlshortener/internal/handler/v1/user_handler"
 	"github.com/xxfasu/urlshortener/internal/middleware"
+	"github.com/xxfasu/urlshortener/internal/repository"
+	"github.com/xxfasu/urlshortener/internal/repository/urls_repository"
+	"github.com/xxfasu/urlshortener/internal/repository/user_repository"
+	"github.com/xxfasu/urlshortener/internal/service/urls_service"
+	"github.com/xxfasu/urlshortener/internal/service/user_service"
+	"github.com/xxfasu/urlshortener/pkg/jwt"
 	"github.com/xxfasu/urlshortener/routes"
 )
 
 // Injectors from wire.go:
 
 func NewWire() (*gin.Engine, func(), error) {
-	recovery := middleware.NewRecoveryM()
-	cors := middleware.NewCorsM()
+	recoveryM := middleware.NewRecoveryM()
+	corsM := middleware.NewCorsM()
 	logM := middleware.NewLogM()
-	engine := routes.NewRouter(recovery, cors, logM)
+	jwtJWT := jwt.New()
+	authM := middleware.NewAuthM(jwtJWT)
+	db, cleanup, err := repository.InitDB()
+	if err != nil {
+		return nil, nil, err
+	}
+	transaction := repository.NewTransaction(db)
+	user_repositoryRepository := user_repository.New(db)
+	service := user_service.New(transaction, user_repositoryRepository)
+	handler := user_handler.New(service)
+	urls_repositoryRepository := urls_repository.New(db)
+	urls_serviceService := urls_service.New(transaction, urls_repositoryRepository)
+	urls_handlerHandler := urls_handler.New(urls_serviceService)
+	engine := routes.NewRouter(recoveryM, corsM, logM, authM, handler, urls_handlerHandler)
 	return engine, func() {
+		cleanup()
 	}, nil
 }
